@@ -10,7 +10,6 @@ import {
   SidebarMenuButton,
   SidebarMenuSub,
   SidebarMenuSubItem,
-  SidebarMenuSubButton,
   SidebarInset,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -85,6 +84,7 @@ const menuItems = [
           {
             title: "Sales",
             icon: BarChart3,
+            isActive: true,
             items: [
               { title: "Sales", icon: BarChart3 },
               { title: "Receipt", icon: Receipt },
@@ -114,24 +114,15 @@ const menuItems = [
 ];
 
 const discountData = [
-  {
-    id: 1,
-    ledger: "Discount",
-    ledgerType: "",
-    message: "",
-  },
-  {
-    id: 2,
-    ledger: "Discount(Special)",
-    ledgerType: "",
-    message: "",
-  },
-  {
-    id: 3,
-    ledger: "Discount(Settlement)",
-    ledgerType: "",
-    message: "",
-  },
+  { id: 1, ledger: "", ledgerType: "", message: "" },
+  { id: 2, ledger: "", ledgerType: "", message: "" },
+  { id: 3, ledger: "", ledgerType: "", message: "" },
+  { id: 4, ledger: "", ledgerType: "", message: "" },
+  { id: 5, ledger: "", ledgerType: "", message: "" },
+  { id: 6, ledger: "", ledgerType: "", message: "" },
+  { id: 7, ledger: "", ledgerType: "", message: "" },
+  { id: 8, ledger: "", ledgerType: "", message: "" },
+  { id: 9, ledger: "", ledgerType: "", message: "" },
 ];
 
 function AppSidebar() {
@@ -156,17 +147,26 @@ function AppSidebar() {
     return (
       <SidebarMenuItem key={item.title}>
         <SidebarMenuButton
-          isActive={item.isActive}
+          isActive={item.isActive && level === 0}
           className={cn(
-            "w-full justify-start",
-            level > 0 && "ml-4",
-            level > 1 && "ml-8",
-            item.isActive && level > 1 && "bg-orange-100 text-orange-600",
+            "w-full justify-start text-left text-sm",
+            level === 0 && "text-gray-700",
+            level === 1 && "ml-4 text-gray-600",
+            level === 2 && "ml-8 text-gray-600",
+            level === 3 && "ml-12 text-gray-600 text-xs",
+            item.isActive &&
+              level === 3 &&
+              "bg-orange-100 text-orange-600 font-medium",
+            item.isActive &&
+              level === 0 &&
+              "bg-orange-100 text-orange-600 font-medium",
           )}
           onClick={() => hasSubItems && toggleExpanded(item.title)}
         >
+          <item.icon className="h-4 w-4 flex-shrink-0" />
+          <span className="flex-1 truncate">{item.title}</span>
           {hasSubItems && (
-            <div className="ml-auto">
+            <div className="ml-auto flex-shrink-0">
               {isExpanded ? (
                 <ChevronDown className="h-4 w-4" />
               ) : (
@@ -189,11 +189,11 @@ function AppSidebar() {
   };
 
   return (
-    <Sidebar>
-      <SidebarContent>
+    <Sidebar className="border-r border-gray-200">
+      <SidebarContent className="bg-white">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="p-2">
               {menuItems.map((item) => renderMenuItem(item))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -224,17 +224,17 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen bg-gray-50">
+      <div className="flex h-screen w-full bg-gray-50">
         <AppSidebar />
         <SidebarInset className="flex-1">
           {/* Header */}
-          <header className="bg-white border-b border-gray-200 px-6 py-4">
+          <header className="bg-white border-b border-gray-200 px-6 py-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-6">
                 {/* Logo */}
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-blue-500 rounded-lg flex items-center justify-center">
-                    <div className="w-5 h-5 bg-white rounded-sm"></div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-400 via-red-400 to-blue-500 rounded-lg flex items-center justify-center">
+                    <div className="w-6 h-6 bg-white rounded transform rotate-45"></div>
                   </div>
                 </div>
 
@@ -245,17 +245,17 @@ const Index = () => {
 
                 {/* Tabs */}
                 <Tabs defaultValue="sales" className="w-auto">
-                  <TabsList className="bg-gray-100">
+                  <TabsList className="bg-gray-100 h-9">
                     <TabsTrigger
                       value="sales"
-                      className="flex items-center space-x-2"
+                      className="flex items-center space-x-2 text-sm"
                     >
                       <BarChart3 className="h-4 w-4" />
                       <span>Sales</span>
                     </TabsTrigger>
                     <TabsTrigger
                       value="purchase"
-                      className="flex items-center space-x-2"
+                      className="flex items-center space-x-2 text-sm"
                     >
                       <Package className="h-4 w-4" />
                       <span>Purchase</span>
@@ -265,9 +265,9 @@ const Index = () => {
               </div>
 
               {/* Right side controls */}
-              <div className="flex items-center space-x-4">
-                <Button variant="ghost" size="icon">
-                  <Bell className="h-5 w-5" />
+              <div className="flex items-center space-x-3">
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Bell className="h-4 w-4" />
                 </Button>
                 <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
               </div>
@@ -276,9 +276,9 @@ const Index = () => {
 
           {/* Main Content */}
           <main className="flex-1 p-6">
-            {/* Toolbar */}
-            <div className="bg-white rounded-lg border border-gray-200 mb-6">
-              <div className="p-4 border-b border-gray-200">
+            <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+              {/* Toolbar */}
+              <div className="px-4 py-3 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     {/* Discount Filter */}
@@ -286,7 +286,7 @@ const Index = () => {
                       value={discountFilter}
                       onValueChange={setDiscountFilter}
                     >
-                      <SelectTrigger className="w-32">
+                      <SelectTrigger className="w-36 h-9">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -307,27 +307,27 @@ const Index = () => {
                         placeholder="Search"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 w-64"
+                        className="pl-10 w-64 h-9"
                       />
                     </div>
                   </div>
 
                   <div className="flex items-center space-x-2">
-                    <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                    <Button className="bg-orange-500 hover:bg-orange-600 text-white h-9 px-4">
                       <Plus className="h-4 w-4 mr-2" />
                       New
                     </Button>
-                    <Button variant="outline">
+                    <Button variant="outline" className="h-9 px-4">
                       <Filter className="h-4 w-4 mr-2" />
                       Filter
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" className="h-9 w-9">
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="text-gray-400"
+                      className="h-9 w-9 text-gray-400"
                     >
                       <Settings className="h-4 w-4" />
                     </Button>
@@ -335,53 +335,77 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Discount Options */}
-              <div className="p-4 bg-gray-50 border-b border-gray-200">
-                <div className="space-y-1">
-                  <div className="px-3 py-2 bg-cyan-400 text-white rounded text-sm font-medium">
-                    Discount
-                  </div>
-                  <div className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
-                    Discount(Special)
-                  </div>
-                  <div className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
-                    Discount(Settlement)
+              <div className="flex">
+                {/* Left Discount Options Panel */}
+                <div className="w-64 border-r border-gray-200 bg-gray-50">
+                  <div className="p-4">
+                    <div className="space-y-1">
+                      <div className="px-3 py-2 bg-cyan-400 text-white rounded text-sm font-medium">
+                        Discount
+                      </div>
+                      <div className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
+                        Discount(Special)
+                      </div>
+                      <div className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
+                        Discount(Settlement)
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Table */}
-              <div className="overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-12">
-                        <Checkbox
-                          checked={selectedRows.length === discountData.length}
-                          onCheckedChange={toggleAllRows}
-                        />
-                      </TableHead>
-                      <TableHead>Ledger</TableHead>
-                      <TableHead>Ledger Type</TableHead>
-                      <TableHead>Message</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {discountData.map((row) => (
-                      <TableRow key={row.id}>
-                        <TableCell>
+                {/* Table */}
+                <div className="flex-1">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="border-b border-gray-200">
+                        <TableHead className="w-12 h-12">
                           <Checkbox
-                            checked={selectedRows.includes(row.id)}
-                            onCheckedChange={() => toggleRowSelection(row.id)}
+                            checked={
+                              selectedRows.length === discountData.length
+                            }
+                            onCheckedChange={toggleAllRows}
                           />
-                        </TableCell>
-                        <TableCell>{row.ledger}</TableCell>
-                        <TableCell>{row.ledgerType}</TableCell>
-                        <TableCell>{row.message}</TableCell>
+                        </TableHead>
+                        <TableHead className="text-left font-medium text-gray-900">
+                          <div className="flex items-center">
+                            Ledger
+                            <BarChart3 className="ml-1 h-4 w-4 text-gray-400" />
+                          </div>
+                        </TableHead>
+                        <TableHead className="text-left font-medium text-gray-900">
+                          Ledger Type
+                        </TableHead>
+                        <TableHead className="text-left font-medium text-gray-900">
+                          Message
+                        </TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {discountData.map((row) => (
+                        <TableRow
+                          key={row.id}
+                          className="border-b border-gray-100 hover:bg-gray-50"
+                        >
+                          <TableCell className="w-12">
+                            <Checkbox
+                              checked={selectedRows.includes(row.id)}
+                              onCheckedChange={() => toggleRowSelection(row.id)}
+                            />
+                          </TableCell>
+                          <TableCell className="text-gray-900">
+                            {row.ledger}
+                          </TableCell>
+                          <TableCell className="text-gray-900">
+                            {row.ledgerType}
+                          </TableCell>
+                          <TableCell className="text-gray-900">
+                            {row.message}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </div>
 
               {/* Pagination */}
@@ -389,7 +413,7 @@ const Index = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <Select defaultValue="10">
-                      <SelectTrigger className="w-16 h-8">
+                      <SelectTrigger className="w-16 h-8 text-sm">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -403,21 +427,32 @@ const Index = () => {
                   <Pagination>
                     <PaginationContent>
                       <PaginationItem>
-                        <PaginationPrevious href="#" />
+                        <PaginationPrevious
+                          href="#"
+                          className="h-8 px-3 text-sm"
+                        />
                       </PaginationItem>
                       <PaginationItem>
-                        <PaginationLink href="#" isActive>
+                        <PaginationLink
+                          href="#"
+                          isActive
+                          className="h-8 w-8 text-sm bg-orange-500 text-white border-orange-500"
+                        >
                           1
                         </PaginationLink>
                       </PaginationItem>
                       <PaginationItem>
-                        <PaginationLink href="#">2</PaginationLink>
+                        <PaginationLink href="#" className="h-8 w-8 text-sm">
+                          2
+                        </PaginationLink>
                       </PaginationItem>
                       <PaginationItem>
-                        <PaginationLink href="#">3</PaginationLink>
+                        <PaginationLink href="#" className="h-8 w-8 text-sm">
+                          3
+                        </PaginationLink>
                       </PaginationItem>
                       <PaginationItem>
-                        <PaginationNext href="#" />
+                        <PaginationNext href="#" className="h-8 px-3 text-sm" />
                       </PaginationItem>
                     </PaginationContent>
                   </Pagination>
