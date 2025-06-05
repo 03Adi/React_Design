@@ -330,14 +330,14 @@ const Index = () => {
 
               {/* Discount Options */}
               <div className="p-4 bg-gray-50 border-b border-gray-200">
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <div className="px-3 py-2 bg-cyan-400 text-white rounded text-sm font-medium">
                     Discount
                   </div>
-                  <div className="px-3 py-1 text-sm text-gray-700">
+                  <div className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
                     Discount(Special)
                   </div>
-                  <div className="px-3 py-1 text-sm text-gray-700">
+                  <div className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
                     Discount(Settlement)
                   </div>
                 </div>
