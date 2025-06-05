@@ -113,17 +113,12 @@ const menuItems = [
   },
 ];
 
-const discountData = [
-  { id: 1, ledger: "", ledgerType: "", message: "" },
-  { id: 2, ledger: "", ledgerType: "", message: "" },
-  { id: 3, ledger: "", ledgerType: "", message: "" },
-  { id: 4, ledger: "", ledgerType: "", message: "" },
-  { id: 5, ledger: "", ledgerType: "", message: "" },
-  { id: 6, ledger: "", ledgerType: "", message: "" },
-  { id: 7, ledger: "", ledgerType: "", message: "" },
-  { id: 8, ledger: "", ledgerType: "", message: "" },
-  { id: 9, ledger: "", ledgerType: "", message: "" },
-];
+const discountData = Array.from({ length: 9 }, (_, i) => ({
+  id: i + 1,
+  ledger: "",
+  ledgerType: "",
+  message: "",
+}));
 
 function AppSidebar() {
   const [expandedItems, setExpandedItems] = useState<string[]>([
@@ -145,26 +140,24 @@ function AppSidebar() {
     const isExpanded = expandedItems.includes(item.title);
 
     return (
-      <SidebarMenuItem key={item.title}>
+      <SidebarMenuItem key={item.title} className="w-full">
         <SidebarMenuButton
-          isActive={item.isActive && level === 0}
+          isActive={false}
           className={cn(
-            "w-full justify-start text-left text-sm",
-            level === 0 && "text-gray-700",
-            level === 1 && "ml-4 text-gray-600",
-            level === 2 && "ml-8 text-gray-600",
-            level === 3 && "ml-12 text-gray-600 text-xs",
+            "w-full justify-start text-left h-8 px-2 py-1",
+            level === 0 && "text-gray-700 font-normal",
+            level === 1 && "ml-4 text-gray-600 text-sm",
+            level === 2 && "ml-8 text-gray-600 text-sm",
+            level === 3 && "ml-12 text-gray-600 text-sm pl-2",
+            item.isActive && level === 0 && "bg-orange-100 text-orange-600",
             item.isActive &&
               level === 3 &&
-              "bg-orange-100 text-orange-600 font-medium",
-            item.isActive &&
-              level === 0 &&
-              "bg-orange-100 text-orange-600 font-medium",
+              "bg-orange-100 text-orange-600 font-medium rounded",
           )}
           onClick={() => hasSubItems && toggleExpanded(item.title)}
         >
           <item.icon className="h-4 w-4 flex-shrink-0" />
-          <span className="flex-1 truncate">{item.title}</span>
+          <span className="flex-1 text-left">{item.title}</span>
           {hasSubItems && (
             <div className="ml-auto flex-shrink-0">
               {isExpanded ? (
@@ -176,24 +169,24 @@ function AppSidebar() {
           )}
         </SidebarMenuButton>
         {hasSubItems && isExpanded && (
-          <SidebarMenuSub>
+          <div className="w-full">
             {item.items.map((subItem: any) => (
-              <SidebarMenuSubItem key={subItem.title}>
+              <div key={subItem.title} className="w-full">
                 {renderMenuItem(subItem, level + 1)}
-              </SidebarMenuSubItem>
+              </div>
             ))}
-          </SidebarMenuSub>
+          </div>
         )}
       </SidebarMenuItem>
     );
   };
 
   return (
-    <Sidebar className="border-r border-gray-200">
+    <Sidebar className="border-r border-gray-200 w-64 flex-shrink-0">
       <SidebarContent className="bg-white">
-        <SidebarGroup>
+        <SidebarGroup className="p-0">
           <SidebarGroupContent>
-            <SidebarMenu className="p-2">
+            <SidebarMenu className="p-2 space-y-1">
               {menuItems.map((item) => renderMenuItem(item))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -224,17 +217,19 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-full bg-gray-50">
+      <div className="flex h-screen w-full bg-gray-100">
         <AppSidebar />
-        <SidebarInset className="flex-1">
+
+        <div className="flex-1 flex flex-col">
           {/* Header */}
-          <header className="bg-white border-b border-gray-200 px-6 py-3">
+          <header className="bg-white border-b border-gray-200 px-6 py-4 flex-shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-6">
                 {/* Logo */}
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-orange-400 via-red-400 to-blue-500 rounded-lg flex items-center justify-center">
-                    <div className="w-6 h-6 bg-white rounded transform rotate-45"></div>
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-400 via-red-400 to-blue-500 rounded-lg flex items-center justify-center relative">
+                    <div className="w-5 h-5 bg-white rounded transform rotate-45"></div>
+                    <div className="absolute top-1 left-1 w-2 h-2 bg-yellow-300 rounded"></div>
                   </div>
                 </div>
 
@@ -275,10 +270,10 @@ const Index = () => {
           </header>
 
           {/* Main Content */}
-          <main className="flex-1 p-6">
-            <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+          <main className="flex-1 p-6 overflow-hidden">
+            <div className="bg-white rounded-lg border border-gray-200 shadow-sm h-full flex flex-col">
               {/* Toolbar */}
-              <div className="px-4 py-3 border-b border-gray-200">
+              <div className="px-4 py-3 border-b border-gray-200 flex-shrink-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     {/* Discount Filter */}
@@ -327,7 +322,7 @@ const Index = () => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-9 w-9 text-gray-400"
+                      className="h-9 w-9 text-red-400"
                     >
                       <Settings className="h-4 w-4" />
                     </Button>
@@ -335,9 +330,10 @@ const Index = () => {
                 </div>
               </div>
 
-              <div className="flex">
+              {/* Content Area */}
+              <div className="flex flex-1 overflow-hidden">
                 {/* Left Discount Options Panel */}
-                <div className="w-64 border-r border-gray-200 bg-gray-50">
+                <div className="w-64 border-r border-gray-200 bg-gray-50 flex-shrink-0">
                   <div className="p-4">
                     <div className="space-y-1">
                       <div className="px-3 py-2 bg-cyan-400 text-white rounded text-sm font-medium">
@@ -353,114 +349,128 @@ const Index = () => {
                   </div>
                 </div>
 
-                {/* Table */}
-                <div className="flex-1">
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="border-b border-gray-200">
-                        <TableHead className="w-12 h-12">
-                          <Checkbox
-                            checked={
-                              selectedRows.length === discountData.length
-                            }
-                            onCheckedChange={toggleAllRows}
-                          />
-                        </TableHead>
-                        <TableHead className="text-left font-medium text-gray-900">
-                          <div className="flex items-center">
-                            Ledger
-                            <BarChart3 className="ml-1 h-4 w-4 text-gray-400" />
-                          </div>
-                        </TableHead>
-                        <TableHead className="text-left font-medium text-gray-900">
-                          Ledger Type
-                        </TableHead>
-                        <TableHead className="text-left font-medium text-gray-900">
-                          Message
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {discountData.map((row) => (
-                        <TableRow
-                          key={row.id}
-                          className="border-b border-gray-100 hover:bg-gray-50"
-                        >
-                          <TableCell className="w-12">
+                {/* Table Container */}
+                <div className="flex-1 flex flex-col">
+                  {/* Table */}
+                  <div className="flex-1 overflow-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="border-b border-gray-200">
+                          <TableHead className="w-12 h-12">
                             <Checkbox
-                              checked={selectedRows.includes(row.id)}
-                              onCheckedChange={() => toggleRowSelection(row.id)}
+                              checked={
+                                selectedRows.length === discountData.length
+                              }
+                              onCheckedChange={toggleAllRows}
                             />
-                          </TableCell>
-                          <TableCell className="text-gray-900">
-                            {row.ledger}
-                          </TableCell>
-                          <TableCell className="text-gray-900">
-                            {row.ledgerType}
-                          </TableCell>
-                          <TableCell className="text-gray-900">
-                            {row.message}
-                          </TableCell>
+                          </TableHead>
+                          <TableHead className="text-left font-medium text-gray-900">
+                            <div className="flex items-center">
+                              Ledger
+                              <BarChart3 className="ml-1 h-4 w-4 text-gray-400" />
+                            </div>
+                          </TableHead>
+                          <TableHead className="text-left font-medium text-gray-900">
+                            Ledger Type
+                          </TableHead>
+                          <TableHead className="text-left font-medium text-gray-900">
+                            Message
+                          </TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </div>
-
-              {/* Pagination */}
-              <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Select defaultValue="10">
-                      <SelectTrigger className="w-16 h-8 text-sm">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="10">10</SelectItem>
-                        <SelectItem value="25">25</SelectItem>
-                        <SelectItem value="50">50</SelectItem>
-                      </SelectContent>
-                    </Select>
+                      </TableHeader>
+                      <TableBody>
+                        {discountData.map((row) => (
+                          <TableRow
+                            key={row.id}
+                            className="border-b border-gray-100 hover:bg-gray-50 h-12"
+                          >
+                            <TableCell className="w-12">
+                              <Checkbox
+                                checked={selectedRows.includes(row.id)}
+                                onCheckedChange={() =>
+                                  toggleRowSelection(row.id)
+                                }
+                              />
+                            </TableCell>
+                            <TableCell className="text-gray-900">
+                              {row.ledger}
+                            </TableCell>
+                            <TableCell className="text-gray-900">
+                              {row.ledgerType}
+                            </TableCell>
+                            <TableCell className="text-gray-900">
+                              {row.message}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
                   </div>
 
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious
-                          href="#"
-                          className="h-8 px-3 text-sm"
-                        />
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink
-                          href="#"
-                          isActive
-                          className="h-8 w-8 text-sm bg-orange-500 text-white border-orange-500"
-                        >
-                          1
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink href="#" className="h-8 w-8 text-sm">
-                          2
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink href="#" className="h-8 w-8 text-sm">
-                          3
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationNext href="#" className="h-8 px-3 text-sm" />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
+                  {/* Pagination */}
+                  <div className="px-4 py-3 border-t border-gray-200 bg-gray-50 flex-shrink-0">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Select defaultValue="10">
+                          <SelectTrigger className="w-16 h-8 text-sm">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="10">10</SelectItem>
+                            <SelectItem value="25">25</SelectItem>
+                            <SelectItem value="50">50</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <Pagination>
+                        <PaginationContent>
+                          <PaginationItem>
+                            <PaginationPrevious
+                              href="#"
+                              className="h-8 px-3 text-sm"
+                            />
+                          </PaginationItem>
+                          <PaginationItem>
+                            <PaginationLink
+                              href="#"
+                              isActive
+                              className="h-8 w-8 text-sm bg-orange-500 text-white border-orange-500"
+                            >
+                              1
+                            </PaginationLink>
+                          </PaginationItem>
+                          <PaginationItem>
+                            <PaginationLink
+                              href="#"
+                              className="h-8 w-8 text-sm"
+                            >
+                              2
+                            </PaginationLink>
+                          </PaginationItem>
+                          <PaginationItem>
+                            <PaginationLink
+                              href="#"
+                              className="h-8 w-8 text-sm"
+                            >
+                              3
+                            </PaginationLink>
+                          </PaginationItem>
+                          <PaginationItem>
+                            <PaginationNext
+                              href="#"
+                              className="h-8 px-3 text-sm"
+                            />
+                          </PaginationItem>
+                        </PaginationContent>
+                      </Pagination>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </main>
-        </SidebarInset>
+        </div>
       </div>
     </SidebarProvider>
   );
