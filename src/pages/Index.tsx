@@ -324,6 +324,13 @@ const Index = () => {
                     <Button variant="ghost" size="icon">
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-400"
+                    >
+                      <Settings className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               </div>
