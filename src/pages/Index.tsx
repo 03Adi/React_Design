@@ -62,40 +62,33 @@ const menuItems = [
     title: "Third Party",
     icon: Users,
     isActive: true,
+    isExpanded: true,
     items: [
-      {
-        title: "Configuration",
-        icon: Settings,
-        isActive: true,
-        items: [
-          {
-            title: "Sales",
-            icon: BarChart3,
-            isActive: true,
-            items: [
-              { title: "Sales", icon: BarChart3 },
-              { title: "Receipt", icon: Receipt },
-              { title: "Debtor", icon: UserPlus },
-              { title: "Discount", icon: Percent, isActive: true },
-              { title: "Taxation", icon: Calculator },
-              { title: "Adjustment", icon: Sliders },
-              { title: "Other Charges", icon: FileText },
-              { title: "Cust./Contact(Due)", icon: Contact },
-              { title: "Cust./Contact(Other)", icon: Contact },
-              { title: "Payment Mode", icon: DollarSign },
-              { title: "Voucher Type", icon: FileBarChart },
-              { title: "Stock Item", icon: Package },
-              { title: "Cost Center", icon: Building },
-              { title: "Common Setting", icon: Settings },
-              { title: "Godown", icon: Package },
-            ],
-          },
-          {
-            title: "Sales Ledger",
-            icon: FileBarChart,
-          },
-        ],
-      },
+      { title: "Configuration", icon: Settings, isActive: true },
+      { title: "Sales", icon: BarChart3 },
+      { title: "Sales Ledger", icon: FileBarChart },
+    ],
+  },
+  {
+    title: "Sales",
+    icon: BarChart3,
+    isExpanded: true,
+    items: [
+      { title: "Sales", icon: BarChart3 },
+      { title: "Receipt", icon: Receipt },
+      { title: "Debtor", icon: UserPlus },
+      { title: "Discount", icon: Percent, isActive: true },
+      { title: "Taxation", icon: Calculator },
+      { title: "Adjustment", icon: Sliders },
+      { title: "Other Charges", icon: FileText },
+      { title: "Cust./Contact(Due)", icon: Contact },
+      { title: "Cust./Contact(Other)", icon: Contact },
+      { title: "Payment Mode", icon: DollarSign },
+      { title: "Voucher Type", icon: FileBarChart },
+      { title: "Stock Item", icon: Package },
+      { title: "Cost Center", icon: Building },
+      { title: "Common Setting", icon: Settings },
+      { title: "Godown", icon: Package },
     ],
   },
 ];
@@ -110,7 +103,6 @@ const discountData = Array.from({ length: 9 }, (_, i) => ({
 function AppSidebar() {
   const [expandedItems, setExpandedItems] = useState<string[]>([
     "Third Party",
-    "Configuration",
     "Sales",
   ]);
 
@@ -132,12 +124,10 @@ function AppSidebar() {
           className={cn(
             "w-full flex items-center justify-start text-left h-8 px-2 py-1 text-sm hover:bg-gray-100 rounded",
             level === 0 && "text-gray-700 font-normal",
-            level === 1 && "ml-4 text-gray-600",
-            level === 2 && "ml-8 text-gray-600",
-            level === 3 && "ml-12 text-gray-600 pl-2",
+            level === 1 && "ml-4 text-gray-600 text-sm",
             item.isActive && level === 0 && "bg-orange-100 text-orange-600",
             item.isActive &&
-              level === 3 &&
+              level === 1 &&
               "bg-orange-100 text-orange-600 font-medium",
           )}
           onClick={() => hasSubItems && toggleExpanded(item.title)}
@@ -155,7 +145,7 @@ function AppSidebar() {
           )}
         </button>
         {hasSubItems && isExpanded && (
-          <div className="w-full">
+          <div className="w-full mt-1">
             {item.items.map((subItem: any) =>
               renderMenuItem(subItem, level + 1),
             )}
