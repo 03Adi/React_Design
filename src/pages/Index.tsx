@@ -155,15 +155,16 @@ function AppSidebar() {
 
     return (
       <SidebarMenuItem key={item.title}>
-        <SidebarMenuButton
-          isActive={item.isActive}
-          className={cn(
-            "w-full justify-start",
-            level > 0 && "ml-4",
-            level > 1 && "ml-8",
-            item.isActive && level > 1 && "bg-orange-100 text-orange-600",
-          )}
-          onClick={() => hasSubItems && toggleExpanded(item.title)}
+          <SidebarMenuButton
+            isActive={item.isActive}
+            className={cn(
+              "w-full justify-start text-left",
+              level > 0 && "ml-4",
+              level > 1 && "ml-8",
+              item.isActive && level > 1 && "bg-orange-100 text-orange-600 border-l-2 border-orange-500"
+            )}
+            onClick={() => hasSubItems && toggleExpanded(item.title)}
+          >
         >
           <item.icon className="h-4 w-4" />
           <span>{item.title}</span>
